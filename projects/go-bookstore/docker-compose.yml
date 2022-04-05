@@ -1,0 +1,33 @@
+version: '3'
+services:
+  go-bookstore:
+    build:
+      context: .
+    command: /bin/sh -c "go run main.go"
+    stdin_open: true
+    tty: true
+    # volumes:
+    #   - .:/go/src/go-bookstore
+    ports:
+      - 9010:9010
+    depends_on:
+      - "db"
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: simplerest
+      MYSQL_USER: michael
+      MYSQL_PASSWORD: thisIsThePassword
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      # - db-data:/var/lib/mysql
+      - ./db/my.cnf:/etc/mysql/conf.d/my.cnf
+    ports:
+      - 3306:3306
+    cap_add:
+      - SYS_NICE  # CAP_SYS_NICE
+
+# volumes:
+#   db-data:
+#     driver: local

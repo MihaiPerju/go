@@ -1,0 +1,21 @@
+version: '3'
+services:
+  go-fiber-crm-basic:
+    build:
+      context: .
+    command: /bin/sh -c "go run main.go"
+    stdin_open: true
+    tty: true
+    ports:
+      - 9010:9010
+    depends_on:
+      - "mongodb"
+  
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    ports:
+      - 27017:27017
